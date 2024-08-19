@@ -1,0 +1,6 @@
+- name: Download grafana
+  ansible.builtin.unarchive:
+    src: https://dl.grafana.com/enterprise/release/grafana-enterprise-{{ version }}.linux-amd64.tar.gz
+    dest: /opt/grafana-enterprise-{{ version }}.linux-amd64/grafana
+    remote_src: yes
+    owner: bin
