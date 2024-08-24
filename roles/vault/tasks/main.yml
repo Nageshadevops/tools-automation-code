@@ -14,3 +14,4 @@
     name: vault
     state: started
     enabled: true
+#pip 3.11 install hvac
