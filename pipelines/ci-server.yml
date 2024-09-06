@@ -8,12 +8,14 @@ pipelines:
         shallow_clone: false
         auto_update: true
         branch: main
+    secure_variables:
+      vault_token: AES:5JMtmuKuivytubqEi0BymQ==:AHNrVFOjkZHo78ED+fJgvYJKKPP8nGg+EK4Dbnf/1rE=
     stages:
-      - Ansible:
-          fetch_materials: true
-          approval:
-            type: manual
-          jobs:
-            ansible:
-              tasks:
-                - exec: {command: ansible-playbook, arguments: [ "-i", "ci-server-internal.angadicnc.online,", "tools.yml", "-e", "tool_name=ci-server", "-e", "ansible_user=ec2-user", "-e", "ansible_password=DevOps321" ], run_if: passed}
+    - Ansible:
+        fetch_materials: true
+        approval:
+          type: manual
+        jobs:
+          ansible:
+            tasks:
+              - exec: {command: ansible-playbook, arguments: [ "-i", "ci-server-internal.angadicnc.online,", "tools.yml", "-e", "tool_name=ci-server", "-e", "ansible_user=ec2-user", "-e", "ansible_password=DevOps321" ], run_if: passed}
