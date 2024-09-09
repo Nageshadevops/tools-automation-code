@@ -1,6 +1,11 @@
 - name: Set Prompt
   ansible.builtin.shell: set-prompt artifactory
 
+- name: Create directory for repo file
+  ansible.builtin.file:
+    path: /etc/yum.repos.d/
+    state: directory
+
 - name: Download artifactory
   ansible.builtin.unarchive:
     src: https://releases.jfrog.io/artifactory/artifactory-rpms/artifactory-rpms.repo
