@@ -6,3 +6,4 @@
     src: https://releases.jfrog.io/artifactory/artifactory-rpms/artifactory-rpms.repo
     dest: /etc/yum.repos.d/jfrog-artifactory-rpms.repo
     remote_src: yes
+#
