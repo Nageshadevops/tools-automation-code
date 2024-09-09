@@ -1,6 +1,12 @@
 - name: Set Prompt
   ansible.builtin.shell: set-prompt artifactory
 
+- name: Download artifactory
+  ansible.builtin.unarchive:
+    src: https://releases.jfrog.io/artifactory/artifactory-rpms/artifactory-rpms.repo
+    dest: /etc/yum.repos.d/
+    remote_src: yes
+
 - name: Copy repo file
   ansible.builtin.template:
     src: jfrog.repo
