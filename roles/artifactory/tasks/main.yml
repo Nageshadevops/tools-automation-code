@@ -1,5 +1,5 @@
 - name: set prompt
-  ansible.builtin.shell: st-prompt artifactory
+  ansible.builtin.shell: set-prompt artifactory
 
 - name: Download artifactory
   ansible.builtin.unarchive:
