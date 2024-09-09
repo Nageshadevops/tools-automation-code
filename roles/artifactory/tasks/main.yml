@@ -1,9 +1,20 @@
 - name: set prompt
   ansible.builtin.shell: set-prompt artifactory
 
-- name: Download artifactory
-  ansible.builtin.unarchive:
-    src: https://releases.jfrog.io/artifactory/artifactory-rpms/artifactory-rpms.repo
+- name: copy jfrog.repo file
+  ansible.builtin.templates:
+    src: jfrog.repo
     dest: /etc/yum.repos.d/jfrog-artifactory-rpms.repo
-    remote_src: yes
+
+- name: Install jfrog
+  ansible.builtin.dnf:
+    name: jfrog-artifactory-oss
+    state: installed
+    disable_gpg_check: true
+
+- name: Start Artifactory
+  ansible.builtin.systemd_service:
+    name: artifactory
+    state: started
+    enabled: yes
       
