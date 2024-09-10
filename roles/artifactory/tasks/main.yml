@@ -1,29 +1,54 @@
-- name: Set Prompt
+- name: Set-prompt name
   ansible.builtin.shell: set-prompt artifactory
+#
+#- name: Copy Jfrog repo
+#  ansible.builtin.template:
+#    src: jfrog.repo
+#    dest: /etc/yum.repos.d/jfrog-artifactory-rpms.repo
+#
+##- name: Download repo file url
+##  ansible.builtin.get_url:
+##    url: https://releases.jfrog.io/artifactory/artifactory-rpms/artifactory-rpms.repo
+##    dest: /etc/yum.repos.d/jfrog-artifactory-rpms.repo
+#
+#- name: Install artifactory
+#  ansible.builtin.dnf:
+#    name: jfrog-artifactory-oss
+#    state: installed
+#    disable_gpg_check: true
+#
+#- name: Start artifactory Service
+#  ansible.builtin.systemd_service:
+#    name: artifactory
+#    state: started
+#    enabled: yes
 
-- name: Create directory for repo file
+- name: Add Artifactory User
+  ansible.builtin.user:
+    name: artifactory
+
+- name: Create Artifactory Directory
   ansible.builtin.file:
-    path: /etc/yum.repos.d/
+    path: /opt/artifactory-oss-7.71.9
     state: directory
+    owner: artifactory
+    group: artifactory
 
-- name: Download artifactory
-  ansible.builtin.get_url:
-    url: https://releases.jfrog.io/artifactory/artifactory-rpms/artifactory-rpms.repo
-    dest: /etc/yum.repos.d/jfrog-artifactory-rpms.repo
+- name: Download Artifactory
+  ansible.builtin.unarchive:
+    src: https://releases.jfrog.io/artifactory/bintray-artifactory/org/artifactory/oss/jfrog-artifactory-oss/7.71.9/jfrog-artifactory-oss-7.71.9-linux.tar.gz
+    dest: /opt/artifactory-oss-7.71.9
+    remote_src: yes
+  become_user: artifactory
 
-- name: Copy repo file
+- name: Setup Service File
   ansible.builtin.template:
-    src: jfrog.repo
-    dest: /etc/yum.repos.d/jfrog-artifactory-rpms.repo
-
-- name: Install Jfrog
-  ansible.builtin.dnf:
-    name: jfrog-artifactory-oss
-    state: installed
-    disable_gpg_check: true
+    src: artifactory.service
+    dest: /etc/systemd/system/artifactory.service
 
 - name: Start Artifactory
   ansible.builtin.systemd_service:
     name: artifactory
     state: started
     enabled: yes
+    daemon-reload: yes
