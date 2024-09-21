@@ -14,30 +14,7 @@
       - jenkins
     state: installed
 
-- name: Create init directory
-  ansible.builtin.file:
-    path: /var/lib/jenkins/init.groovy.d
-    state: directory
-
-- name: Copy init scripts
-  ansible.builtin.template:
-    src: "templates/{{item}}.groovy"
-    dest: /var/lib/jenkins/init.groovy.d/{{item}}.groovy
-  loop:
-    - 01-wizard
-    - 02-admin-user
-    - 03-plugins
-
 - name: Start Jenkins Service
   ansible.builtin.systemd_service:
     name: jenkins
     state: restarted
-    enabled: yes
-
-- name: Create Jobs
-  community.general.jenkins_job:
-    config: "{{ lookup('file', 'templates/jobs/pipeline.xml') }}"
-    name: test
-    password: "{{secrets.jenkins_password}}"
-    url: http://jenkins-internal.angadicnc.online:8080
-    user: "{{secrets.jenkins_user}}"
